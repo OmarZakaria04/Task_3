@@ -30,6 +30,20 @@ export default function AllPerks() {
 
 */
 
+  // useEffect Hook #1: Initial Data Loading
+  useEffect(() => {
+    loadAllPerks()
+  }, [])
+
+  // useEffect Hook #2: Auto-search on Input Change (debounced)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadAllPerks()
+    }, 500) // 500ms delay
+
+    return () => clearTimeout(timer) // Cleanup on unmount or re-render
+  }, [searchQuery, merchantFilter])
+
   
   useEffect(() => {
     // Extract all merchant names from perks array
@@ -136,6 +150,8 @@ export default function AllPerks() {
                 type="text"
                 className="input"
                 placeholder="Enter perk name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 
               />
               <p className="text-xs text-zinc-500 mt-1">
@@ -151,7 +167,8 @@ export default function AllPerks() {
               </label>
               <select
                 className="input"
-                
+                value={merchantFilter}
+                onChange={(e) => setMerchantFilter(e.target.value)}
               >
                 <option value="">All Merchants</option>
                 
@@ -289,4 +306,3 @@ export default function AllPerks() {
     </div>
   )
 }
-
